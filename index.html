@@ -2,121 +2,84 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Giantess RPG Character Sheet</title>
+<title>Black Velvet High Heel Pumps</title>
 <style>
-body{font-family:Georgia,serif;background:#e9e9e9;margin:20px}
-.sheet{max-width:1200px;margin:auto;background:white;padding:25px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.15)}
-.top{display:grid;grid-template-columns:300px 1fr;gap:20px}
-.photo{background:#ddd;height:420px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:20px}
-h1{margin-top:0}
-.section{margin-top:20px;border-top:2px solid #ccc;padding-top:10px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #bbb;padding:6px;text-align:center}
-input{width:70px}
-button{padding:8px 20px;border:none;border-radius:10px;background:#444;color:white;font-size:15px;margin-top:10px}
-.small{font-size:14px;color:#555}
+body{font-family:Georgia,serif;background:#d8c86a;margin:0;padding:30px}
+.sheet{max-width:1100px;margin:auto;background:#e6d27a;padding:25px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.top{display:grid;grid-template-columns:420px 1fr;gap:25px}
+.photo{height:520px;background:#ccc;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px}
+h1{margin:0 0 10px 0}
+.block{margin-bottom:15px}
+table{width:100%;border-collapse:collapse;font-size:16px}
+td{padding:3px 6px}
+.right{text-align:right}
+.small{font-size:15px}
+input{width:70px;font-size:16px}
 </style>
 </head>
 <body>
 <div class="sheet">
-
 <div class="top">
-<div class="photo">Character Image</div>
-
+<div class="photo">Shoe Image</div>
 <div>
-<h1 id="nameOut">Elisa</h1>
-<div class="grid3 small">
-Name <input id="name" value="Elisa">
-Level <input id="level" type="number" value="20">
-Size x <input id="size" type="number" value="1">
+<h1>Black Velvet High Heel Pumps</h1>
+<div class="block small">
+<b>Type:</b> High Heeled Pumps<br>
+<b>Category:</b> Shoes<br>
+<b>Complexity:</b> 2 (0/15) + 2 [Artifact Bonus]
 </div>
 
-<div class="section">
-<b>Base Stats</b>
-<div class="grid3">
-STR <input id="str" value="13">
-DEX <input id="dex" value="24">
-CON <input id="con" value="21">
-INT <input id="int" value="16">
-WIS <input id="wis" value="15">
-CHA <input id="cha" value="13">
-</div>
-<button onclick="calc()">Update Sheet</button>
+<div class="block">
+<b>Size Multiplier:</b> <input id="size" type="number" step="0.1" value="1" oninput="calc()"> (x1 → x100)
 </div>
 
-<div class="section">
-<b>Physical Data</b>
 <table>
-<tr><th>Height</th><th>Weight</th><th>Carry</th><th>HP</th></tr>
-<tr>
-<td id="height"></td>
-<td id="weight"></td>
-<td id="carry"></td>
-<td id="hp"></td>
-</tr>
+<tr><td><b>Weight/each:</b></td><td class="right">Human <span id="wH"></span></td><td class="right">Giantess <span id="wG"></span></td></tr>
+<tr><td><b>Height/Platform:</b></td><td class="right"><span id="hpH"></span></td><td class="right"><span id="hpG"></span></td></tr>
+<tr><td><b>Area/Platform:</b></td><td class="right"><span id="apH"></span></td><td class="right"><span id="apG"></span></td></tr>
+<tr><td><b>Height/Heel:</b></td><td class="right"><span id="hhH"></span></td><td class="right"><span id="hhG"></span></td></tr>
+<tr><td><b>Area/Heel:</b></td><td class="right"><span id="ahH"></span></td><td class="right"><span id="ahG"></span></td></tr>
+<tr><td><b>Height/Cover:</b></td><td class="right"><span id="hcH"></span></td><td class="right"><span id="hcG"></span></td></tr>
+<tr><td><b>AC - Melee:</b></td><td class="right">+0</td><td class="right">+6</td></tr>
+<tr><td><b>AC - Ranged:</b></td><td class="right">+0</td><td class="right">+1</td></tr>
 </table>
-</div>
-
-<div class="section">
-<b>Combat</b>
-<table>
-<tr><th>Base Damage</th><th>Trample Damage</th><th>AC</th></tr>
-<tr>
-<td id="damage"></td>
-<td id="trample"></td>
-<td id="ac"></td>
-</tr>
-</table>
-</div>
 
 </div>
 </div>
-
-<div class="section">
-<b>Equipment Bonuses</b>
-<div class="grid3">
-Heel STR Bonus <input id="heelStr" value="0">
-Heel AC Bonus <input id="heelAC" value="0">
-Armor Bonus <input id="armor" value="0">
-</div>
-</div>
-
 </div>
 
 <script>
 function calc(){
-let name=document.getElementById('name').value
-let level=Number(document.getElementById('level').value)
-let size=Number(document.getElementById('size').value)
-let STR=Number(document.getElementById('str').value)+Number(document.getElementById('heelStr').value)
-let CON=Number(document.getElementById('con').value)
-let armor=Number(document.getElementById('armor').value)
-let heelAC=Number(document.getElementById('heelAC').value)
+let s=parseFloat(document.getElementById('size').value)
 
-let height=160*size
-let weight=55*size*size
-let carry=STR*size*5
-let hp=(10+CON)*level*size/2
-let damage=Math.floor(STR*size/2)+"d6"
-let trample=Math.floor(STR*size)+"d8"
-let ac=10+armor+heelAC+Math.floor(size/2)
+// Base human values
+let w=0.4
+let hp=4.3
+let ap=49.5
+let hh=15.5
+let ah=1
+let hc=26
 
-document.getElementById('nameOut').innerHTML=name
+// Giantess scaling (area ~ s^2, length ~ s, weight ~ s^3 approx)
+document.getElementById('wH').innerHTML=w.toFixed(1)+' kg'
+document.getElementById('wG').innerHTML=(w*s*s*s).toFixed(1)+' kg'
 
-document.getElementById('height').innerHTML=height.toFixed(0)+" cm"
-document.getElementById('weight').innerHTML=weight.toFixed(0)+" kg"
-document.getElementById('carry').innerHTML=carry.toFixed(0)+" kg"
-document.getElementById('hp').innerHTML=Math.floor(hp)
+document.getElementById('hpH').innerHTML=hp.toFixed(1)+' cm'
+document.getElementById('hpG').innerHTML=(hp*s).toFixed(1)+' cm'
 
-document.getElementById('damage').innerHTML=damage
+document.getElementById('apH').innerHTML=ap.toFixed(1)+' cm²'
+document.getElementById('apG').innerHTML=(ap*s*s/10000).toFixed(2)+' m²'
 
-document.getElementById('trample').innerHTML=trample
+document.getElementById('hhH').innerHTML=hh.toFixed(1)+' cm'
+document.getElementById('hhG').innerHTML=(hh*s).toFixed(1)+' cm'
 
-document.getElementById('ac').innerHTML=ac
+document.getElementById('ahH').innerHTML=ah.toFixed(1)+' cm²'
+document.getElementById('ahG').innerHTML=(ah*s*s).toFixed(1)+' cm²'
+
+document.getElementById('hcH').innerHTML=hc.toFixed(1)+' cm'
+document.getElementById('hcG').innerHTML=(hc*s).toFixed(1)+' cm'
 }
+calc()
 </script>
-
 </body>
 </html>
