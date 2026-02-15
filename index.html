@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Giantess RPG Tool</title>
+</head>
+<body>
+
+<h1>Elisa Character Sheet</h1>
+
+<label>Body Size (cm):</label>
+<input id="size" type="number" value="160">
+
+<button onclick="updateStats()">Update Stats</button>
+
+<h2 id="strength"></h2>
+
+<script>
+function updateStats() {
+    let size = document.getElementById("size").value;
+    let strength = 10 + size * 0.05;
+    document.getElementById("strength").innerHTML =
+        "Strength: " + strength.toFixed(1);
+}
+</script>
+
+</body>
+</html>
