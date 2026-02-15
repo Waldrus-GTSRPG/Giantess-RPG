@@ -21,6 +21,14 @@ function updateStats() {
     document.getElementById("strength").innerHTML =
         "Strength: " + strength.toFixed(1);
 }
+async function loadData() {
+    let response = await fetch("stats.csv");
+    let text = await response.text();
+
+    let rows = text.split("\n");
+    console.log(rows);
+}
+loadData();    
 </script>
 
 </body>
