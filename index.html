@@ -4,70 +4,117 @@
 <meta charset="UTF-8">
 <title>Giantess RPG Character Sheet</title>
 <style>
-body{font-family:Arial;margin:20px;background:#f5f5f5}
-.card{background:white;padding:20px;border-radius:15px;margin-bottom:20px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-input{width:80px}
-button{padding:10px 20px;margin-top:10px;border-radius:10px;border:none;background:#4CAF50;color:white;font-size:16px}
-h2{margin-top:0}
+body{font-family:Georgia,serif;background:#e9e9e9;margin:20px}
+.sheet{max-width:1200px;margin:auto;background:white;padding:25px;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.15)}
+.top{display:grid;grid-template-columns:300px 1fr;gap:20px}
+.photo{background:#ddd;height:420px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:20px}
+h1{margin-top:0}
+.section{margin-top:20px;border-top:2px solid #ccc;padding-top:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #bbb;padding:6px;text-align:center}
+input{width:70px}
+button{padding:8px 20px;border:none;border-radius:10px;background:#444;color:white;font-size:15px;margin-top:10px}
+.small{font-size:14px;color:#555}
 </style>
 </head>
 <body>
+<div class="sheet">
 
-<div class="card">
-<h2>Character Basics</h2>
-Name: <input id="name" value="Elisa">
-Level: <input id="level" type="number" value="20">
-Size Multiplier (x1-x100): <input id="size" type="number" value="1">
-<button onclick="calculate()">Update Stats</button>
+<div class="top">
+<div class="photo">Character Image</div>
+
+<div>
+<h1 id="nameOut">Elisa</h1>
+<div class="grid3 small">
+Name <input id="name" value="Elisa">
+Level <input id="level" type="number" value="20">
+Size x <input id="size" type="number" value="1">
 </div>
 
-<div class="card">
-<h2>Base Stats</h2>
-<div class="grid">
-STR <input id="str" type="number" value="13">
-DEX <input id="dex" type="number" value="24">
-CON <input id="con" type="number" value="21">
-INT <input id="int" type="number" value="16">
-WIS <input id="wis" type="number" value="15">
-CHA <input id="cha" type="number" value="13">
+<div class="section">
+<b>Base Stats</b>
+<div class="grid3">
+STR <input id="str" value="13">
+DEX <input id="dex" value="24">
+CON <input id="con" value="21">
+INT <input id="int" value="16">
+WIS <input id="wis" value="15">
+CHA <input id="cha" value="13">
+</div>
+<button onclick="calc()">Update Sheet</button>
+</div>
+
+<div class="section">
+<b>Physical Data</b>
+<table>
+<tr><th>Height</th><th>Weight</th><th>Carry</th><th>HP</th></tr>
+<tr>
+<td id="height"></td>
+<td id="weight"></td>
+<td id="carry"></td>
+<td id="hp"></td>
+</tr>
+</table>
+</div>
+
+<div class="section">
+<b>Combat</b>
+<table>
+<tr><th>Base Damage</th><th>Trample Damage</th><th>AC</th></tr>
+<tr>
+<td id="damage"></td>
+<td id="trample"></td>
+<td id="ac"></td>
+</tr>
+</table>
+</div>
+
 </div>
 </div>
 
-<div class="card">
-<h2>Results</h2>
-<p id="height"></p>
-<p id="weight"></p>
-<p id="carry"></p>
-<p id="damage"></p>
-<p id="hp"></p>
+<div class="section">
+<b>Equipment Bonuses</b>
+<div class="grid3">
+Heel STR Bonus <input id="heelStr" value="0">
+Heel AC Bonus <input id="heelAC" value="0">
+Armor Bonus <input id="armor" value="0">
+</div>
+</div>
+
 </div>
 
 <script>
-function calculate(){
+function calc(){
+let name=document.getElementById('name').value
+let level=Number(document.getElementById('level').value)
+let size=Number(document.getElementById('size').value)
+let STR=Number(document.getElementById('str').value)+Number(document.getElementById('heelStr').value)
+let CON=Number(document.getElementById('con').value)
+let armor=Number(document.getElementById('armor').value)
+let heelAC=Number(document.getElementById('heelAC').value)
 
-let level = Number(document.getElementById('level').value);
-let size = Number(document.getElementById('size').value);
+let height=160*size
+let weight=55*size*size
+let carry=STR*size*5
+let hp=(10+CON)*level*size/2
+let damage=Math.floor(STR*size/2)+"d6"
+let trample=Math.floor(STR*size)+"d8"
+let ac=10+armor+heelAC+Math.floor(size/2)
 
-let STR = Number(document.getElementById('str').value);
-let CON = Number(document.getElementById('con').value);
+document.getElementById('nameOut').innerHTML=name
 
-// Example scaling rules
-let heightBase = 160; // cm
-let weightBase = 55; // kg
+document.getElementById('height').innerHTML=height.toFixed(0)+" cm"
+document.getElementById('weight').innerHTML=weight.toFixed(0)+" kg"
+document.getElementById('carry').innerHTML=carry.toFixed(0)+" kg"
+document.getElementById('hp').innerHTML=Math.floor(hp)
 
-let height = heightBase * size;
-let weight = weightBase * size * size * 0.9;
-let carry = STR * size * 5;
-let damage = Math.floor(STR * size / 2) + "d6";
-let hp = Math.floor((10 + CON) * level * size * 0.5);
+document.getElementById('damage').innerHTML=damage
 
+document.getElementById('trample').innerHTML=trample
 
-document.getElementById('height').innerHTML = "Height: " + height.toFixed(0) + " cm";
-document.getElementById('weight').innerHTML = "Weight: " + weight.toFixed(0) + " kg";
-document.getElementById('carry').innerHTML = "Carry Weight: " + carry.toFixed(0) + " kg";
-document.getElementById('damage').innerHTML = "Base Damage: " + damage;
-document.getElementById('hp').innerHTML = "HP: " + hp;
+document.getElementById('ac').innerHTML=ac
 }
 </script>
 
