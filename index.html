@@ -4,13 +4,21 @@
     <title>Giantess RPG Tool</title>
 </head>
 <body>
+    
+<h1>Elisa Character Sheet</h1>
 
+<label>Body Size (cm):</label>
+<input id="size" type="number" value="160">
+
+<button onclick="updateStats()">Update Stats</button>
+
+<h2 id="strength"></h2>
   
 <button onclick="show('character')">Character</button>
 <button onclick="show('equipment')">Equipment</button>
 
 <div id="character">Character info here</div>
-<div id="equipment" style="display:none">Equipment here</div>
+<div id="equipment">Equipment here</div>
 
 <script>
 function show(tab) {
