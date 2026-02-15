@@ -13,8 +13,19 @@
 <button onclick="updateStats()">Update Stats</button>
 
 <h2 id="strength"></h2>
+    
+<button onclick="show('character')">Character</button>
+<button onclick="show('equipment')">Equipment</button>
+
+<div id="character">Character info here</div>
+<div id="equipment" style="display:none">Equipment here</div>
 
 <script>
+function show(tab) {
+    document.getElementById("Character").style.display = "none";
+    document.getElementById("Equipment").style.display = "none";
+    document.getElementById(tab).style.display = "block";
+}
 function updateStats() {
     let size = document.getElementById("size").value;
     let strength = 10 + size * 0.05;
