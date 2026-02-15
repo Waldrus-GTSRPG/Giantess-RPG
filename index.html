@@ -1,45 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Giantess RPG Tool</title>
+<meta charset="UTF-8">
+<title>Giantess RPG Character Sheet</title>
+<style>
+body{font-family:Arial;margin:20px;background:#f5f5f5}
+.card{background:white;padding:20px;border-radius:15px;margin-bottom:20px;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+input{width:80px}
+button{padding:10px 20px;margin-top:10px;border-radius:10px;border:none;background:#4CAF50;color:white;font-size:16px}
+h2{margin-top:0}
+</style>
 </head>
 <body>
-    
-<h1>Elisa Character Sheet</h1>
 
-<label>Body Size (cm):</label>
-<input id="size" type="number" value="160">
+<div class="card">
+<h2>Character Basics</h2>
+Name: <input id="name" value="Elisa">
+Level: <input id="level" type="number" value="20">
+Size Multiplier (x1-x100): <input id="size" type="number" value="1">
+<button onclick="calculate()">Update Stats</button>
+</div>
 
-<button onclick="updateStats()">Update Stats</button>
+<div class="card">
+<h2>Base Stats</h2>
+<div class="grid">
+STR <input id="str" type="number" value="13">
+DEX <input id="dex" type="number" value="24">
+CON <input id="con" type="number" value="21">
+INT <input id="int" type="number" value="16">
+WIS <input id="wis" type="number" value="15">
+CHA <input id="cha" type="number" value="13">
+</div>
+</div>
 
-<h2 id="strength"></h2>
-  
-<button onclick="show('character')">Character</button>
-<button onclick="show('equipment')">Equipment</button>
-
-<div id="character">Character info here</div>
-<div id="equipment">Equipment here</div>
+<div class="card">
+<h2>Results</h2>
+<p id="height"></p>
+<p id="weight"></p>
+<p id="carry"></p>
+<p id="damage"></p>
+<p id="hp"></p>
+</div>
 
 <script>
-function show(tab) {
-    document.getElementById("Character").style.display = "none";
-    document.getElementById("Equipment").style.display = "none";
-    document.getElementById(tab).style.display = "block";
-}
-function updateStats() {
-    let size = document.getElementById("size").value;
-    let strength = 10 + size * 0.05;
-    document.getElementById("strength").innerHTML =
-        "Strength: " + strength.toFixed(1);
-}
-async function loadData() {
-    let response = await fetch("stats.csv");
-    let text = await response.text();
+function calculate(){
 
-    let rows = text.split("\n");
-    console.log(rows);
+let level = Number(document.getElementById('level').value);
+let size = Number(document.getElementById('size').value);
+
+let STR = Number(document.getElementById('str').value);
+let CON = Number(document.getElementById('con').value);
+
+// Example scaling rules
+let heightBase = 160; // cm
+let weightBase = 55; // kg
+
+let height = heightBase * size;
+let weight = weightBase * size * size * 0.9;
+let carry = STR * size * 5;
+let damage = Math.floor(STR * size / 2) + "d6";
+let hp = Math.floor((10 + CON) * level * size * 0.5);
+
+
+document.getElementById('height').innerHTML = "Height: " + height.toFixed(0) + " cm";
+document.getElementById('weight').innerHTML = "Weight: " + weight.toFixed(0) + " kg";
+document.getElementById('carry').innerHTML = "Carry Weight: " + carry.toFixed(0) + " kg";
+document.getElementById('damage').innerHTML = "Base Damage: " + damage;
+document.getElementById('hp').innerHTML = "HP: " + hp;
 }
-loadData();    
 </script>
 
 </body>
