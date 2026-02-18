@@ -2,84 +2,87 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Black Velvet High Heel Pumps</title>
+<title>Giantess Shoe Comparison</title>
+
 <style>
-body{font-family:Georgia,serif;background:#d8c86a;margin:0;padding:30px}
-.sheet{max-width:1100px;margin:auto;background:#e6d27a;padding:25px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3)}
-.top{display:grid;grid-template-columns:420px 1fr;gap:25px}
-.photo{height:520px;background:#ccc;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px}
-h1{margin:0 0 10px 0}
-.block{margin-bottom:15px}
-table{width:100%;border-collapse:collapse;font-size:16px}
-td{padding:3px 6px}
-.right{text-align:right}
-.small{font-size:15px}
-input{width:70px;font-size:16px}
+body{
+    background:#222;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+.viewer{
+    position:relative;
+    width:800px;
+    margin:auto;
+}
+
+.shoe{
+    width:100%;
+}
+
+.human{
+    position:absolute;
+    transform-origin:bottom center;
+    pointer-events:none;
+    height:590px; /* your measured human size */
+}
 </style>
 </head>
 <body>
-<div class="sheet">
-<div class="top">
-<div class="photo">Shoe Image</div>
-<div>
-<h1>Black Velvet High Heel Pumps</h1>
-<div class="block small">
-<b>Type:</b> High Heeled Pumps<br>
-<b>Category:</b> Shoes<br>
-<b>Complexity:</b> 2 (0/15) + 2 [Artifact Bonus]
-</div>
 
-<div class="block">
-<b>Size Multiplier:</b> <input id="size" type="number" step="0.1" value="1" oninput="calc()"> (x1 → x100)
-</div>
+<h2>Giantess Shoe Comparison</h2>
 
-<table>
-<tr><td><b>Weight/each:</b></td><td class="right">Human <span id="wH"></span></td><td class="right">Giantess <span id="wG"></span></td></tr>
-<tr><td><b>Height/Platform:</b></td><td class="right"><span id="hpH"></span></td><td class="right"><span id="hpG"></span></td></tr>
-<tr><td><b>Area/Platform:</b></td><td class="right"><span id="apH"></span></td><td class="right"><span id="apG"></span></td></tr>
-<tr><td><b>Height/Heel:</b></td><td class="right"><span id="hhH"></span></td><td class="right"><span id="hhG"></span></td></tr>
-<tr><td><b>Area/Heel:</b></td><td class="right"><span id="ahH"></span></td><td class="right"><span id="ahG"></span></td></tr>
-<tr><td><b>Height/Cover:</b></td><td class="right"><span id="hcH"></span></td><td class="right"><span id="hcG"></span></td></tr>
-<tr><td><b>AC - Melee:</b></td><td class="right">+0</td><td class="right">+6</td></tr>
-<tr><td><b>AC - Ranged:</b></td><td class="right">+0</td><td class="right">+1</td></tr>
-</table>
+Size:
+<input type="range" id="sizeSlider" min="1" max="100" step="0.1" value="1" oninput="syncSize()">
+<input type="number" id="sizeBox" min="1" max="100" step="0.1" value="1" oninput="syncSize()">
 
-</div>
-</div>
+<div class="viewer">
+
+    <!-- YOUR SHOE IMAGE -->
+    <img src="shoe.jpg" class="shoe">
+
+    <!-- Human vs Heel -->
+    <img src="human.png" id="humanHeel" class="human"
+         style="left:520px; bottom:80px;">
+
+    <!-- Human vs Platform -->
+    <img src="human.png" id="humanPlatform" class="human"
+         style="left:300px; bottom:120px;">
+
 </div>
 
 <script>
-function calc(){
-let s=parseFloat(document.getElementById('size').value)
 
-// Base human values
-let w=0.4
-let hp=4.3
-let ap=49.5
-let hh=15.5
-let ah=1
-let hc=26
+// ===== YOUR REAL DATA =====
+const HUMAN_CM = 190
+const HEEL_CM = 15.5
+const PLATFORM_CM = 4.3
 
-// Giantess scaling (area ~ s^2, length ~ s, weight ~ s^3 approx)
-document.getElementById('wH').innerHTML=w.toFixed(1)+' kg'
-document.getElementById('wG').innerHTML=(w*s*s*s).toFixed(1)+' kg'
-
-document.getElementById('hpH').innerHTML=hp.toFixed(1)+' cm'
-document.getElementById('hpG').innerHTML=(hp*s).toFixed(1)+' cm'
-
-document.getElementById('apH').innerHTML=ap.toFixed(1)+' cm²'
-document.getElementById('apG').innerHTML=(ap*s*s/10000).toFixed(2)+' m²'
-
-document.getElementById('hhH').innerHTML=hh.toFixed(1)+' cm'
-document.getElementById('hhG').innerHTML=(hh*s).toFixed(1)+' cm'
-
-document.getElementById('ahH').innerHTML=ah.toFixed(1)+' cm²'
-document.getElementById('ahG').innerHTML=(ah*s*s).toFixed(1)+' cm²'
-
-document.getElementById('hcH').innerHTML=hc.toFixed(1)+' cm'
-document.getElementById('hcG').innerHTML=(hc*s).toFixed(1)+' cm'
+function syncSize(){
+    let val = document.getElementById("sizeSlider").value
+    document.getElementById("sizeBox").value = val
+    update()
 }
-calc()
+
+function update(){
+
+    let size = parseFloat(document.getElementById("sizeBox").value)
+
+    // correct scaling
+    let scaleHeel = HUMAN_CM / (HEEL_CM * size)
+    let scalePlatform = HUMAN_CM / (PLATFORM_CM * size)
+
+    document.getElementById("humanHeel").style.transform =
+        "scale(" + scaleHeel + ")"
+
+    document.getElementById("humanPlatform").style.transform =
+        "scale(" + scalePlatform + ")"
+}
+
+update()
+
 </script>
 </body>
 </html>
