@@ -56,32 +56,36 @@ Size:
 <script>
 
 // ===== YOUR REAL DATA =====
-const HUMAN_CM = 190
-const HEEL_CM = 15.5
-const PLATFORM_CM = 4.3
+const sizeSlider = document.getElementById("sizeSlider");
+const sizeValue = document.getElementById("sizeValue");
+const humanHeel = document.getElementById("humanHeel");
+const humanPlatform = document.getElementById("humanPlatform");
 
-function syncSize(){
-    let val = document.getElementById("sizeSlider").value
-    document.getElementById("sizeBox").value = val
-    update()
+// --- Real measurements ---
+const humanCm = 190;
+const heelCm = 15.5;
+const platformCm = 4.3;
+
+// --- Pixel measurements from image ---
+const heelPx = 250;
+const platformPx = 80;
+
+// px per cm based on shoe image
+const shoePxPerCm = heelPx / heelCm;
+
+function updateScale() {
+  let size = parseFloat(sizeSlider.value);
+  sizeValue.textContent = size.toFixed(1);
+
+  let humanRealCm = humanCm / size;
+  let humanPx = humanRealCm * shoePxPerCm;
+
+  humanHeel.style.height = humanPx + "px";
+  humanPlatform.style.height = humanPx + "px";
 }
 
-function update(){
-
-    let size = parseFloat(document.getElementById("sizeBox").value)
-
-    // correct scaling
-    let scaleHeel = HUMAN_CM / (HEEL_CM * size)
-    let scalePlatform = HUMAN_CM / (PLATFORM_CM * size)
-
-    document.getElementById("humanHeel").style.transform =
-        "scale(" + scaleHeel + ")"
-
-    document.getElementById("humanPlatform").style.transform =
-        "scale(" + scalePlatform + ")"
-}
-
-update()
+sizeSlider.addEventListener("input", updateScale);
+updateScale();
 
 </script>
 </body>
