@@ -35,11 +35,8 @@ body{
 <h2>Giantess Shoe Comparison</h2>
 
 Size:
-<div style="width:1200px; margin:auto;">    
-    
-<input type="range" id="sizeSlider" min="1" max="100" step="0.1" value="1" oninput="syncSize()">
-    
-</div>
+<input type="range" id="sizeSlider" min="10" max="1000" step="1" value="10">
+
     
 <input type="number" id="sizeBox" min="1" max="100" step="0.1" value="1" oninput="syncSize()">
 
@@ -72,7 +69,11 @@ const heelPx = 250;
 
 const shoePxPerCm = heelPx / heelCm;
 
-function updateScale(size) {
+function updateScale() {
+  let size = parseFloat(sizeSlider.value) / 10;
+
+  sizeBox.value = size.toFixed(1);
+
   let humanRealCm = humanCm / size;
   let humanPx = humanRealCm * shoePxPerCm;
 
