@@ -26,7 +26,6 @@ body{
     position:absolute;
     transform-origin:bottom center;
     pointer-events:none;
-    height:590px; /* your measured human size */
 }
 </style>
 </head>
@@ -35,21 +34,15 @@ body{
 <h2>Giantess Shoe Comparison</h2>
 
 Size:
-<input type="range" id="sizeSlider" min="10" max="1000" step="1" value="10">
-
-    
-<input type="number" id="sizeBox" step="0.1" oninput="syncSize()">
+<input type="number" id="sizeBox" min="1" max="100" step="0.1" value="1">
 
 <div class="viewer">
 
-    <!-- YOUR SHOE IMAGE -->
     <img src="Shoe.jpg" class="shoe">
 
-    <!-- Human vs Heel -->
     <img src="Human.png" id="humanHeel" class="human"
          style="left:520px; bottom:80px;">
 
-    <!-- Human vs Platform -->
     <img src="Human.png" id="humanPlatform" class="human"
          style="left:300px; bottom:120px;">
 
@@ -57,7 +50,6 @@ Size:
 
 <script>
 
-const sizeSlider = document.getElementById("sizeSlider");
 const sizeBox = document.getElementById("sizeBox");
 const humanHeel = document.getElementById("humanHeel");
 const humanPlatform = document.getElementById("humanPlatform");
@@ -69,10 +61,12 @@ const heelPx = 250;
 
 const shoePxPerCm = heelPx / heelCm;
 
-function updateScale() {
-  let size = parseFloat(sizeSlider.value) / 10;
+function updateScale(){
 
-  sizeBox.value = size.toFixed(1);
+  let size = parseFloat(sizeBox.value);
+
+  // Safety if box empty
+  if(!size || size <= 0) return;
 
   let humanRealCm = humanCm / size;
   let humanPx = humanRealCm * shoePxPerCm;
@@ -81,19 +75,10 @@ function updateScale() {
   humanPlatform.style.height = humanPx + "px";
 }
 
-function syncSize() {
-  let size = parseFloat(sizeSlider.value);
-  sizeBox.value = size;
-  updateScale(size);
-}
+sizeBox.addEventListener("input", updateScale);
 
-sizeSlider.addEventListener("input", syncSize);
-sizeBox.addEventListener("input", function(){
-  sizeSlider.value = sizeBox.value;
-  syncSize();
-});
-
-syncSize();
+// run once on page load
+updateScale();
 
 </script>
 </body>
